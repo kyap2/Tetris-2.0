@@ -1,18 +1,18 @@
 /* just added CSS self explanatory, used flex box for this to show yello and red blocks */
 
-.grid
-{
-    width: 200px;
-    height: 400px;
-    background-color: yellow;
-    display: flex;
-    flex-wrap: wrap;
-
+.grid {
+  width: 200px;
+  height: 400px;
+  background-color: yellow;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.grid div
-{
-    height: 20px;
-    width: 20px;
-    background-color: red; 
+.grid div {
+  height: 20px;
+  width: 20px;
+}
+
+.tetromino {
+  background-color: blue;
 }

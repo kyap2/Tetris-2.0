@@ -1,11 +1,12 @@
 
-document.addEventListener('DOMContentLoaded', () => { //Links to html 
+document.addEventListener('DOMContentLoaded', () => { //Links to html JOSE
     
     const grid = document.querySelector('.grid')
     let squares = Array.from(document.querySelectorAll('.grid div'))
     const ScoreDisplay = document.querySelector("#score")
     const StartBtn = document.querySelector("#start-button")
     const width = 10
+    let nextRandom = 0
 
     //The Tetrominoes, which are the actually shapes in tetris
 
@@ -75,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => { //Links to html
         if(e.keyCode == 37) { //there are codes for arrow keys, so in this case 37 == left arrow key
             moveLeft()
         } else if(e.keyCode === 38) {
-            //rotate
+            rotate()
         } else if (e.keyCode === 39) {
             moveRight()
         } else if (e.keyCode === 40) {
@@ -97,10 +98,12 @@ document.addEventListener('DOMContentLoaded', () => { //Links to html
         if(current.some(index => squares[currentPosition + index + width].classList.contains('taken'))) {
             current.forEach(index => squares[currentPosition + index].classList.add('taken'))
             //start a new tetromino falling
-            random = Math.floor(Math.random() * theTetrominoes.length)
+            random = nextRandom
+            nextRandom = Math.floor(Math.random() * theTetrominoes.length)
             current = theTetrominoes[random][currentRotation]
             currentPosition = 4
             draw()
+            displayShape()
         }
     }
 
@@ -120,14 +123,78 @@ document.addEventListener('DOMContentLoaded', () => { //Links to html
     //move the tetromino right, unless is at the edge or there is a blockage
     //Start here kdrdreams
 
+    function moveRight()
+    {
+        undraw()
+        const isAtRightEdge = current.some(index => (currentPosition + index) % width == width -1)
+
+        if (!isAtRightEdge) currentPosition +=1
+        if (current.some(index => squares[currentPosition + index].classList.contains('taken')))
+        {
+            currentPosition -=1;
+        }
+        draw();
+    }
+
+    // rotates the tetris block
+    function rotate()
+    {
+        undraw()
+        currentRotation ++
+        // if current rotation is 4 go to 0 
+        if (currentRotation === current.length)
+        {
+            currentRotation = 0;
+        }
+        current = theTetrominoes[random][currentRotation]
+        draw()
+    }
+
+    // show next termino in mini-grid 
+
+    const displaySquares = document.querySelectorAll('.mini-grid div')
+    const displayWidth = 4
+    let displayIndex = 0
+
+    // the tetronomes without rotations 
+    const upNextTetrominoes = [
+        [1, displayWidth+1, displayWidth*2+1, 2]
+        [0, displayWidth, displayWidth+1, displayWidth +2]
+        [1, displayWidth, displayWidth+1, displayWidth+2]
+        [0, 1, displayWidth, displayWidth+1], 
+        [1, displayWidth+1, displayWidth*2+1, displayWidth*3+1] // tetro
+    ]
+
+    // display function with the shape in the mini grid display something broke around here, it is not displaying the SHAPE 
+
+    function displayShape()
+    {
+        displaySquares.forEach(square =>
+        {
+            square.classList.remove('tetromino')
+        })
+
+        upNextTetrominoes[nextRandom].forEach(index => {
+            displaySquares[displayIndex + index].classList.add('tetromino')
+        
+        })
+    }
+
  
     //Started at 27:45 mins -Kyle
     //ended 1:00:00 mins - Kyle
+
+    // started 1:00:00 - jose
+    // ended 1:15:00
 
     //Basically I worked on majority of the javascript, creating the different functions needed
     //I would say look through them bc it can get confusing some logic I dont understand so I will go back to them
     //But I just made the tetrominoes, made them into an array, draw them on the grid, draw/undraw
      // the timing of them falling, left movement, freeze function so it stops at the bottom
+
+     /** SOOO KDRDR3AMZ (JOSE) broke this somehow, jk, but the yellow square which shows the next tetris block does not actually show the next one
+      * IDK why it does not work; but its not a HUGE deal, incase jorge wants to fix it 
+      */
 
 })  
 

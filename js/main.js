@@ -3,10 +3,13 @@ document.addEventListener('DOMContentLoaded', () => { //Links to html JOSE
     
     const grid = document.querySelector('.grid')
     let squares = Array.from(document.querySelectorAll('.grid div'))
-    const ScoreDisplay = document.querySelector("#score")
-    const StartBtn = document.querySelector("#start-button")
+    const scoreDisplay = document.querySelector("#score")
+    const startBtn = document.querySelector("#start-button")
     const width = 10
     let nextRandom = 0
+    let timerId
+    let score = 0
+
 
     //The Tetrominoes, which are the actually shapes in tetris
 
@@ -69,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => { //Links to html JOSE
     }
 
     //make the tetromino move down every second
-    timerId = setInterval(moveDown, 1000)
+    // timerId = setInterval(moveDown, 1000)
 
     //assign function to keyCodes (for arrowkeys/movement)
     function control(e) {
@@ -104,6 +107,8 @@ document.addEventListener('DOMContentLoaded', () => { //Links to html JOSE
             currentPosition = 4
             draw()
             displayShape()
+            addScore()
+            gameOver()
         }
     }
 
@@ -158,14 +163,15 @@ document.addEventListener('DOMContentLoaded', () => { //Links to html JOSE
 
     // the tetronomes without rotations 
     const upNextTetrominoes = [
-        [1, displayWidth+1, displayWidth*2+1, 2]
-        [0, displayWidth, displayWidth+1, displayWidth +2]
-        [1, displayWidth, displayWidth+1, displayWidth+2]
-        [0, 1, displayWidth, displayWidth+1], 
-        [1, displayWidth+1, displayWidth*2+1, displayWidth*3+1] // tetro
+        [1, displayWidth+1, displayWidth*2+1, 2], //lTetromino (make sure to add ',' after each [])
+        [0, displayWidth, displayWidth+1, displayWidth +2], //zTetromino
+        [1, displayWidth, displayWidth+1, displayWidth+2], //tTetromino
+        [0, 1, displayWidth, displayWidth+1], //oTetromino
+        [1, displayWidth+1, displayWidth*2+1, displayWidth*3+1] // iTetromino
     ]
 
     // display function with the shape in the mini grid display something broke around here, it is not displaying the SHAPE 
+    // The upNext Tetromino was not displaying because the commas ',' were not present after each [] - jorge
 
     function displayShape()
     {
@@ -179,13 +185,65 @@ document.addEventListener('DOMContentLoaded', () => { //Links to html JOSE
         
         })
     }
+    
+    
 
+// we only want the tetromino to move down when we press the "Start" button, having the line of code in Line 74 makes it where the tetrimino moves down as soon as the webpage is open - Jorge (Start/Pause button is functional now)
+
+//adding functionality to the button
+startBtn.addEventListener('click', () =>{
+    if (timerId){//When the pause button is clicked and the timer ID has a value, we change the timerId value to null (when I click the pause button the game pauses) - Jorge
+        clearInterval(timerId)
+        timerId = null
+    } else{//when I click on the play button, it starts moving the tetrimino down every second and displays the next shape - Jorge
+        draw()
+        timerId = setInterval(moveDown, 1000)
+        nextRandom = Math.floor(Math.random()*theTetrominoes.length)
+        displayShape()
+    }
+})
  
+
+//add score
+function addScore() {
+    for (let i = 0; i < 199; i +=width) {
+        const row = [i, i+1, i+2, i+3, i+4, i+5, i+6, i+7, i+8, i+9]
+
+        if(row.every(index => squares[index].classList.contains('taken'))) {
+            score +=10
+            scoreDisplay.innerHTML = score
+            row.forEach(index => {
+                squares[index].classList.remove('taken')
+                squares[index].classList.remove('tetromino')
+            })
+            const squaresRemoved = squares.splice(i, width)
+            squares = squaresRemoved.concat(squares)
+            squares.forEach(cell => grid.appendChild(cell))
+        }
+    }
+}
+
+//game over
+function gameOver() {
+    if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+        scoreDisplay.innerHTML = 'Game Over'
+        clearInterval(timerId)
+    }
+}
+
+
+
+
+
+
     //Started at 27:45 mins -Kyle
     //ended 1:00:00 mins - Kyle
 
     // started 1:00:00 - jose
     // ended 1:15:00
+
+    //started 1:15:00 - Jorge
+    //ended 1:31:00 - Jorge
 
     //Basically I worked on majority of the javascript, creating the different functions needed
     //I would say look through them bc it can get confusing some logic I dont understand so I will go back to them
@@ -196,6 +254,13 @@ document.addEventListener('DOMContentLoaded', () => { //Links to html JOSE
       * IDK why it does not work; but its not a HUGE deal, incase jorge wants to fix it 
       */
 
+      /*
+      Features Implemented by Jorge: 
+        - upNext now displays correctly
+        - Start/Pause button is now funcional
+        - Bottom line now dissapears
+        - Added the score counter (every line that is made is 10 points)
+      */
 })  
 
 

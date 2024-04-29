@@ -1,7 +1,12 @@
 /* just added CSS self explanatory, used flex box for this to show yello and red blocks */
-.container
-{
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.scoreboard {
     display: flex;
+    justify-content: center;
 }
 .grid {
   width: 200px;
@@ -20,18 +25,16 @@
   background-color: blue;
 }
 
-.mini-grid
-{
-    margin-left: 50px;
-    width: 80px;
-    height: 80px;
-    display: flex;
-    flex-wrap: wrap;
-    background-color: yellow;
+.mini-grid {
+  margin-left: 50px;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: yellow;
 }
 
-.mini-grid div
-{
-    height: 20px;
-    width: 20px;
+.mini-grid div {
+  height: 20px;
+  width: 20px;
 }
